@@ -24,6 +24,13 @@ class ProgressBarButton @JvmOverloads constructor(
         get() = progress * 360f
 
     private val arcOvalRect = RectF()
+    private val horizontalAnimationRect: RectF
+        get() = RectF().apply {
+            top = 0f
+            left = 0f
+            bottom = height.toFloat()
+            right = width * progress
+        }
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -37,6 +44,7 @@ class ProgressBarButton @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         calculateCircleDimensions()
+        progress = 1f
     }
 
     private fun calculateCircleDimensions() {
@@ -50,7 +58,9 @@ class ProgressBarButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
+        paint.color = Color.CYAN
+        canvas.drawRect(horizontalAnimationRect, paint)
+        paint.color = Color.GRAY
         canvas.drawArc(arcOvalRect, 0f, sweepAngle, true, paint)
     }
 }
