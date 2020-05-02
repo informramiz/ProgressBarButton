@@ -17,20 +17,13 @@ class ProgressBarButton @JvmOverloads constructor(
     var progress = 0f
         set(value) {
             field = value
-            invalidate()
+            onProgressUpdated()
         }
 
     private val sweepAngle: Float
         get() = progress * 360f
-
+    private var horizontalAnimationRect = RectF()
     private val arcOvalRect = RectF()
-    private val horizontalAnimationRect: RectF
-        get() = RectF().apply {
-            top = 0f
-            left = 0f
-            bottom = height.toFloat()
-            right = width * progress
-        }
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -44,6 +37,8 @@ class ProgressBarButton @JvmOverloads constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         calculateCircleDimensions()
+        calculateHorizontalAnimationRectangleDimensions()
+        //TODO: Remove this as it is here just for testing
         progress = 1f
     }
 
@@ -54,6 +49,20 @@ class ProgressBarButton @JvmOverloads constructor(
         arcOvalRect.top = circleInsetVertical
         arcOvalRect.right = arcOvalRect.left + radius * 2
         arcOvalRect.bottom = arcOvalRect.top + radius * 2
+    }
+
+    private fun calculateHorizontalAnimationRectangleDimensions() {
+        horizontalAnimationRect.apply {
+            top = 0f
+            left = 0f
+            bottom = height.toFloat()
+            right = width * progress
+        }
+    }
+
+    private fun onProgressUpdated() {
+        horizontalAnimationRect.right = width * progress
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
