@@ -14,11 +14,15 @@ class ProgressBarButton @JvmOverloads constructor(
     defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
-    private var radius = 0f
-    private var circleInsetVertical = 0f
-    private var circleCenterY = 0f
-    private var circleCenterX = 0f
-    private val path = Path()
+    var progress = 0f
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    private val sweepAngle: Float
+        get() = progress * 360f
+
     private val arcOvalRect = RectF()
 
     private val paint = Paint().apply {
@@ -32,20 +36,22 @@ class ProgressBarButton @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        radius = height / 3.5f
-        circleInsetVertical = (height - radius*2) / 2
-        circleCenterY = circleInsetVertical + radius
-        circleCenterX = width / 2f
+        calculateCircleDimensions()
+    }
+
+    private fun calculateCircleDimensions() {
+        val radius = height / 3.5f
+        val circleInsetVertical = (height - radius * 2) / 2
         arcOvalRect.left = width / 2f
         arcOvalRect.top = circleInsetVertical
         arcOvalRect.right = arcOvalRect.left + radius * 2
         arcOvalRect.bottom = arcOvalRect.top + radius * 2
+        progress = 0.5f
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-//        canvas.drawCircle(circleCenterX, circleCenterY, radius, paint)
-        canvas.drawArc(arcOvalRect, 0f, 90f, true, paint)
+        canvas.drawArc(arcOvalRect, 0f, sweepAngle, true, paint)
     }
 }
