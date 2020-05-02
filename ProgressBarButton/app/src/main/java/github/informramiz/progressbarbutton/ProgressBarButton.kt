@@ -1,9 +1,7 @@
 package github.informramiz.progressbarbutton
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 
@@ -20,6 +18,8 @@ class ProgressBarButton @JvmOverloads constructor(
     private var circleInsetVertical = 0f
     private var circleCenterY = 0f
     private var circleCenterX = 0f
+    private val path = Path()
+    private val arcOvalRect = RectF()
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -36,11 +36,16 @@ class ProgressBarButton @JvmOverloads constructor(
         circleInsetVertical = (height - radius*2) / 2
         circleCenterY = circleInsetVertical + radius
         circleCenterX = width / 2f
+        arcOvalRect.left = width / 2f
+        arcOvalRect.top = circleInsetVertical
+        arcOvalRect.right = arcOvalRect.left + radius * 2
+        arcOvalRect.bottom = arcOvalRect.top + radius * 2
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        canvas.drawCircle(circleCenterX, circleCenterY, radius, paint)
+//        canvas.drawCircle(circleCenterX, circleCenterY, radius, paint)
+        canvas.drawArc(arcOvalRect, 0f, 90f, true, paint)
     }
 }
