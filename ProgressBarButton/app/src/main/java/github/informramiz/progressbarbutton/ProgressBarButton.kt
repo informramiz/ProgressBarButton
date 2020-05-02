@@ -46,7 +46,6 @@ class ProgressBarButton @JvmOverloads constructor(
         arcOvalRect.top = circleInsetVertical
         arcOvalRect.right = arcOvalRect.left + radius * 2
         arcOvalRect.bottom = arcOvalRect.top + radius * 2
-        progress = 0.5f
     }
 
     override fun onDraw(canvas: Canvas) {
