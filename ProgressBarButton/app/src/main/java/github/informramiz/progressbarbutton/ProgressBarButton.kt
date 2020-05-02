@@ -66,7 +66,7 @@ class ProgressBarButton @JvmOverloads constructor(
     }
 
     private fun calculateCircleDimensions(start: Float = width/2f) {
-        val radius = height / 3.5f
+        val radius = height / 4.5f
         val circleInsetVertical = (height - radius * 2) / 2
         arcOvalRect.left = start
         arcOvalRect.top = circleInsetVertical
