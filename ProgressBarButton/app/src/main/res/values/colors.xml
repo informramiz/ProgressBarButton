@@ -3,4 +3,8 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="progress_button_color">#29C0B1</color>
+    <color name="progress_button_horizontal_progress_color">#FF0B7D72</color>
+    <color name="progress_button_circular_progress_color">#E3A935</color>
+    <color name="progress_button_text_color">#FFFFFF</color>
 </resources>

@@ -1,11 +1,18 @@
 package github.informramiz.progressbarbutton
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.Dimension
+import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.core.content.withStyledAttributes
 
 /**
  * Created by Ramiz Raja on 01/05/2020
@@ -17,9 +24,10 @@ class ProgressBarButton @JvmOverloads constructor(
     defStyle: Int = 0
 ) : View(context, attrs, defStyle) {
 
+    @FloatRange(from = 0.0, to = 1.0)
     var progress = 0f
         set(value) {
-            field = value
+            field = value.coerceAtLeast(0f).coerceAtMost(1f)
             onProgressUpdated()
         }
 
@@ -33,19 +41,34 @@ class ProgressBarButton @JvmOverloads constructor(
         get() = progress * 360f
     private var horizontalAnimationRect = RectF()
     private val arcOvalRect = RectF()
+
     @ColorInt
-    private val textColor: Int = Color.BLACK
+    private var textColor: Int = ContextCompat.getColor(context, R.color.progress_button_text_color)
+    @ColorInt
+    private var normalBackgroundColor = ContextCompat.getColor(context, R.color.progress_button_color)
+    @ColorInt
+    private var horizontalProgressColor = ContextCompat.getColor(context, R.color.progress_button_horizontal_progress_color)
+    @ColorInt
+    private var circularProgressColor = ContextCompat.getColor(context, R.color.progress_button_circular_progress_color)
+    @Dimension
     private val suggestedMinWidth = resources.getDimensionPixelSize(R.dimen.progress_button_min_width)
+    @Dimension
     private val suggestedMinHeight = resources.getDimensionPixelSize(R.dimen.progress_button_min_height)
 
     private val paint = Paint().apply {
         isAntiAlias = true
-        color = Color.GRAY
         textSize = 40f
+        color = textColor
     }
 
     init {
-        setBackgroundColor(Color.GREEN)
+        context.withStyledAttributes(attrs, R.styleable.ProgressBarButton) {
+            progress = getFloat(R.styleable.ProgressBarButton_progress, 0f).coerceAtMost(1f).coerceAtLeast(0f)
+            textColor = getColor(R.styleable.ProgressBarButton_textColor, textColor)
+            normalBackgroundColor = getColor(R.styleable.ProgressBarButton_normalBackgroundColor, normalBackgroundColor)
+            horizontalProgressColor = getColor(R.styleable.ProgressBarButton_horizontalProgressColor, horizontalProgressColor)
+            circularProgressColor = getColor(R.styleable.ProgressBarButton_circularProgressColor, circularProgressColor)
+        }
     }
 
     private fun onProgressUpdated() {
@@ -62,9 +85,6 @@ class ProgressBarButton @JvmOverloads constructor(
         super.onSizeChanged(w, h, oldw, oldh)
         calculateCircleDimensions()
         calculateHorizontalAnimationRectangleDimensions()
-        //TODO: Remove this as it is here just for testing
-        progress = 0.9f
-        state = State.LOADING
     }
 
     private fun calculateCircleDimensions(start: Float = width/2f) {
@@ -85,9 +105,15 @@ class ProgressBarButton @JvmOverloads constructor(
         }
     }
 
+    fun resetState() {
+        progress = 0f
+        state = State.NORMAL
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        paint.color = Color.CYAN
+        canvas.drawColor(normalBackgroundColor)
+        paint.color = horizontalProgressColor
         canvas.drawRect(horizontalAnimationRect, paint)
 
         //draw text
@@ -98,7 +124,7 @@ class ProgressBarButton @JvmOverloads constructor(
         canvas.drawText(text, textStartX, height/1.75f, paint)
 
         //draw circular progress
-        paint.color = Color.GRAY
+        paint.color = circularProgressColor
         calculateCircleDimensions(textStartX + textWidth + 10)
         canvas.drawArc(arcOvalRect, 0f, sweepAngle, true, paint)
     }
