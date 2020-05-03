@@ -35,6 +35,8 @@ class ProgressBarButton @JvmOverloads constructor(
     private val arcOvalRect = RectF()
     @ColorInt
     private val textColor: Int = Color.BLACK
+    private val suggestedMinWidth = resources.getDimensionPixelSize(R.dimen.progress_button_min_width)
+    private val suggestedMinHeight = resources.getDimensionPixelSize(R.dimen.progress_button_min_height)
 
     private val paint = Paint().apply {
         isAntiAlias = true
@@ -99,6 +101,24 @@ class ProgressBarButton @JvmOverloads constructor(
         paint.color = Color.GRAY
         calculateCircleDimensions(textStartX + textWidth + 10)
         canvas.drawArc(arcOvalRect, 0f, sweepAngle, true, paint)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        //define views desired/suggested min width (padding is also part of the view)
+        val minWidth = suggestedMinWidth + paddingStart + paddingEnd
+        //resolve and select either our suggested width (minWidth)
+        // or specified by the parent of this view (widthMeasureSpec)
+        val finalWidth = resolveSizeAndState(minWidth, widthMeasureSpec, 0)
+
+        //define views desired/suggested min height (padding is also part of the view)
+        val minHeight = suggestedMinHeight + paddingTop + paddingBottom
+        //resolve and select either our suggested height (minHeight)
+        // or specified by the parent of this view (heightMeasureSpec)
+        val finalHeight = resolveSizeAndState(minHeight, heightMeasureSpec, 0)
+
+        //let the parent know the possible final width and height and let it decide what to
+        //do next
+        setMeasuredDimension(finalWidth, finalHeight)
     }
 
     enum class State(@field:StringRes val labelResId: Int) {
