@@ -4,11 +4,17 @@
     <string name="app_description">Download files from Internet</string>
     <string name="action_settings">Settings</string>
 
+    <!--  Main Activity  -->
+    <string name="download_glide">Glide - Image downloading library by BumpTech</string>
+    <string name="download_current_repo">ProgressBarButton - This project repository</string>
+    <string name="download_retrofit">Retrofit - A type safe HTTP client for Android and Java by Square, Inc</string>
 
+    <!-- Notification   -->
     <string name="notification_title">Udacity: Android Kotlin Nanodegree </string>
     <string name="notification_description">The Project 3 repository is downloaded</string>
     <string name="notification_button">See changes</string>
 
+    <!--  ProgressBarButton  -->
     <string name="button_state_normal">Download</string>
     <string name="button_loading">We are loading </string>
     <string name="button_loading_failed">Loading Retry</string>

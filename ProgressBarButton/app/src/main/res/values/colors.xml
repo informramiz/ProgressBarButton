@@ -7,4 +7,5 @@
     <color name="progress_button_horizontal_progress_color">#FF0B7D72</color>
     <color name="progress_button_circular_progress_color">#E3A935</color>
     <color name="progress_button_text_color">#FFFFFF</color>
+    <color name="download_icon_tint_color">#8181EA</color>
 </resources>
