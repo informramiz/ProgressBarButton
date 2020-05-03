@@ -13,6 +13,7 @@ import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import androidx.core.view.postDelayed
 
 /**
  * Created by Ramiz Raja on 01/05/2020
@@ -31,7 +32,7 @@ class ProgressBarButton @JvmOverloads constructor(
             onProgressUpdated()
         }
 
-    var state: State = State.NORMAL
+    private var state: State = State.NORMAL
         set(value) {
             field = value
             onStateUpdated()
@@ -72,8 +73,19 @@ class ProgressBarButton @JvmOverloads constructor(
     }
 
     private fun onProgressUpdated() {
+        if (progress > 0f) {
+            state = State.LOADING
+        } else if (progress == 0f && state == State.LOADING){
+            state = State.NORMAL
+        }
         horizontalAnimationRect.right = width * progress
         invalidate()
+
+        if (progress == 1f) {
+            postDelayed(100) {
+                resetState()
+            }
+        }
     }
 
     private fun onStateUpdated() {
@@ -105,7 +117,7 @@ class ProgressBarButton @JvmOverloads constructor(
         }
     }
 
-    fun resetState() {
+    private fun resetState() {
         progress = 0f
         state = State.NORMAL
     }
@@ -150,7 +162,5 @@ class ProgressBarButton @JvmOverloads constructor(
     enum class State(@field:StringRes val labelResId: Int) {
         NORMAL(R.string.button_state_normal),
         LOADING(R.string.button_loading),
-        FAILED(R.string.button_loading_failed),
-        DONE(R.string.button_state_normal)
     }
 }
