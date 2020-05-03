@@ -63,6 +63,7 @@ class ProgressBarButton @JvmOverloads constructor(
     }
 
     init {
+        isClickable = true
         context.withStyledAttributes(attrs, R.styleable.ProgressBarButton) {
             progress = getFloat(R.styleable.ProgressBarButton_progress, 0f).coerceAtMost(1f).coerceAtLeast(0f)
             textColor = getColor(R.styleable.ProgressBarButton_textColor, textColor)
