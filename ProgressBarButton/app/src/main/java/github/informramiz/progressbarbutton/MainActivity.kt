@@ -2,12 +2,15 @@ package github.informramiz.progressbarbutton
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import github.informramiz.progressbarbutton.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private val progressBarButton: ProgressBarButton by lazy { findViewById<ProgressBarButton>(R.id.progress_button) }
+    private val viewBinding: ActivityMainBinding by lazy{
+        ActivityMainBinding.inflate(layoutInflater)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(viewBinding.root)
     }
 }

@@ -8,6 +8,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.1"
 
+    dataBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "github.informramiz.progressbarbutton"
         minSdkVersion 21
