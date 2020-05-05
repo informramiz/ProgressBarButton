@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="github.informramiz.progressbarbutton.view.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
@@ -62,6 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{() -> viewModel.downloadGlide()}"
             app:circularProgressColor="@color/progress_button_circular_progress_color"
             app:horizontalProgressColor="@color/progress_button_horizontal_progress_color"
             app:layout_constraintBottom_toBottomOf="parent"
