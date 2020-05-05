@@ -1,8 +1,7 @@
-package github.informramiz.progressbarbutton
+package github.informramiz.progressbarbutton.view
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
@@ -14,6 +13,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.postDelayed
+import github.informramiz.progressbarbutton.R
 
 /**
  * Created by Ramiz Raja on 01/05/2020
@@ -32,7 +32,8 @@ class ProgressBarButton @JvmOverloads constructor(
             onProgressUpdated()
         }
 
-    private var state: State = State.NORMAL
+    private var state: State =
+        State.NORMAL
         set(value) {
             field = value
             onStateUpdated()
@@ -44,13 +45,21 @@ class ProgressBarButton @JvmOverloads constructor(
     private val arcOvalRect = RectF()
 
     @ColorInt
-    private var textColor: Int = ContextCompat.getColor(context, R.color.progress_button_text_color)
+    private var textColor: Int = ContextCompat.getColor(context,
+        R.color.progress_button_text_color
+    )
     @ColorInt
-    private var normalBackgroundColor = ContextCompat.getColor(context, R.color.progress_button_color)
+    private var normalBackgroundColor = ContextCompat.getColor(context,
+        R.color.progress_button_color
+    )
     @ColorInt
-    private var horizontalProgressColor = ContextCompat.getColor(context, R.color.progress_button_horizontal_progress_color)
+    private var horizontalProgressColor = ContextCompat.getColor(context,
+        R.color.progress_button_horizontal_progress_color
+    )
     @ColorInt
-    private var circularProgressColor = ContextCompat.getColor(context, R.color.progress_button_circular_progress_color)
+    private var circularProgressColor = ContextCompat.getColor(context,
+        R.color.progress_button_circular_progress_color
+    )
     @Dimension
     private val suggestedMinWidth = resources.getDimensionPixelSize(R.dimen.progress_button_min_width)
     @Dimension
@@ -64,7 +73,9 @@ class ProgressBarButton @JvmOverloads constructor(
 
     init {
         isClickable = true
-        context.withStyledAttributes(attrs, R.styleable.ProgressBarButton) {
+        context.withStyledAttributes(attrs,
+            R.styleable.ProgressBarButton
+        ) {
             progress = getFloat(R.styleable.ProgressBarButton_progress, 0f).coerceAtMost(1f).coerceAtLeast(0f)
             textColor = getColor(R.styleable.ProgressBarButton_textColor, textColor)
             normalBackgroundColor = getColor(R.styleable.ProgressBarButton_normalBackgroundColor, normalBackgroundColor)
@@ -75,9 +86,11 @@ class ProgressBarButton @JvmOverloads constructor(
 
     private fun onProgressUpdated() {
         if (progress > 0f) {
-            state = State.LOADING
+            state =
+                State.LOADING
         } else if (progress == 0f && state == State.LOADING){
-            state = State.NORMAL
+            state =
+                State.NORMAL
         }
         horizontalAnimationRect.right = width * progress
         invalidate()
@@ -120,7 +133,8 @@ class ProgressBarButton @JvmOverloads constructor(
 
     private fun resetState() {
         progress = 0f
-        state = State.NORMAL
+        state =
+            State.NORMAL
     }
 
     override fun onDraw(canvas: Canvas) {

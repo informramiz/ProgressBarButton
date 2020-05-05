@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutDescription="@xml/motion_scene_main_activity"
-        tools:context=".MainActivity">
+        tools:context=".view.MainActivity">
 
         <ImageView
             android:id="@+id/download_image_placeholder"
@@ -57,7 +57,7 @@
                 android:text="@string/download_retrofit" />
         </RadioGroup>
 
-        <github.informramiz.progressbarbutton.ProgressBarButton
+        <github.informramiz.progressbarbutton.view.ProgressBarButton
             android:id="@+id/progress_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

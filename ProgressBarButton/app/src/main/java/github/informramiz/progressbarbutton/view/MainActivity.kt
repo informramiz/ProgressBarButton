@@ -1,4 +1,4 @@
-package github.informramiz.progressbarbutton
+package github.informramiz.progressbarbutton.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
