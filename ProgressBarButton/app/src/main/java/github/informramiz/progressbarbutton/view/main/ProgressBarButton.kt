@@ -1,4 +1,4 @@
-package github.informramiz.progressbarbutton.view
+package github.informramiz.progressbarbutton.view.main
 
 import android.content.Context
 import android.graphics.Canvas
