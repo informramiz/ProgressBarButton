@@ -2,6 +2,9 @@ package github.informramiz.progressbarbutton.model
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import timber.log.Timber
@@ -12,33 +15,30 @@ import java.io.File
  */
 object GitHubRepository {
 
-    suspend fun getGlide(context: Context) {
-        downloadRepo(context, "bumptech", "glide", "glide.zip")
+    suspend fun getGlide(context: Context): Flow<DownloadStatus> {
+        return downloadRepo(context, "bumptech", "glide", "glide.zip")
     }
 
-    private suspend fun downloadRepo(context: Context, owner: String, repo: String, outputFileName: String) {
+    private suspend fun downloadRepo(context: Context, owner: String, repo: String, outputFileName: String): Flow<DownloadStatus> = flow {
         withContext(Dispatchers.IO) {
+            emit(DownloadStatus.Downloading(0f))
             val response = GitHubAPI.INSTANCE.getRepo(owner, repo)
-            if (response.isSuccessful) {
-                Timber.d("Get Glide is successful")
-                streamFile(context, outputFileName, response.body()!!)
+            if (!response.isSuccessful || response.body() == null) {
+                Timber.d("Get $repo failed")
+                emit(DownloadStatus.DownloadFailed(Exception(response.errorBody()?.string() ?: "")))
             } else {
-                Timber.d("Get Glide failed")
+                Timber.d("Get $repo is successful, streaming now")
+                try {
+                    emitAll(streamFile(context, outputFileName, response.body()!!))
+                } catch (e: Exception) {
+                    Timber.d("Repo streaming failed: $e")
+                    emit(DownloadStatus.DownloadFailed(e))
+                }
             }
         }
     }
 
-    private fun streamFile(context: Context, filename: String, responseBody: ResponseBody) {
-        val progressListener = object : ProgressListener {
-            override fun onProgress(progress: Double) {
-                Timber.d("On progress update: $progress")
-            }
-
-            override fun onDone() {
-                Timber.d("onDone")
-            }
-        }
-
+    private fun streamFile(context: Context, filename: String, responseBody: ResponseBody): Flow<DownloadStatus> = flow {
         val file = File(context.getExternalFilesDir(null), filename)
         file.outputStream().use { outputStream ->
             responseBody.byteStream().use { inputStream ->
@@ -58,14 +58,14 @@ object GitHubRepository {
                         //we keep progress at 99% until we are done
                         progress = 0.99
                     }
-                    progressListener.onProgress(progress)
+                    emit(DownloadStatus.Downloading(progress.toFloat()))
 
                     outputStream.write(data, 0, bytesRead)
                     bytesRead = inputStream.read(data)
                 }
 
-                progressListener.onProgress(1.0)
-                progressListener.onDone()
+                emit(DownloadStatus.Downloading(1f))
+                emit(DownloadStatus.Download)
             }
         }
     }
