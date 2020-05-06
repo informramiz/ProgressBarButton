@@ -17,7 +17,7 @@ object GitHubRepository {
 
     suspend fun downloadRepo(context: Context, owner: String, repo: String, outputFileName: String): Flow<DownloadStatus> = flow {
         withContext(Dispatchers.IO) {
-            emit(DownloadStatus.Downloading(0.1f))
+            emit(DownloadStatus.Downloading(0.01f))
             val response = GitHubAPI.INSTANCE.getRepo(owner, repo)
             if (!response.isSuccessful || response.body() == null) {
                 Timber.d("Get $repo failed")
@@ -38,7 +38,7 @@ object GitHubRepository {
         val file = File(context.getExternalFilesDir(null), filename)
         file.outputStream().use { outputStream ->
             responseBody.byteStream().use { inputStream ->
-                val data = ByteArray(1024 * 16)
+                val data = ByteArray(1024 * 4)
                 var bytesRead: Int
                 var totalBytesRead = 0L
                 val totalSize =
