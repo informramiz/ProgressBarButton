@@ -65,7 +65,7 @@ object GitHubRepository {
                 }
 
                 emit(DownloadStatus.Downloading(1f))
-                emit(DownloadStatus.Download)
+                emit(DownloadStatus.Downloaded)
             }
         }
     }

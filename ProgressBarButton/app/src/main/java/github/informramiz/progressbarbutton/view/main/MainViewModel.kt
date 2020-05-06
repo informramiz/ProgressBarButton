@@ -1,9 +1,8 @@
 package github.informramiz.progressbarbutton.view.main
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import github.informramiz.progressbarbutton.model.DownloadStatus
 import github.informramiz.progressbarbutton.model.GitHubRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -15,12 +14,16 @@ import timber.log.Timber
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
+    private val _downloadStatus = MutableLiveData<DownloadStatus>()
+    val downloadStatus: LiveData<DownloadStatus>
+        get() = _downloadStatus
+
     fun downloadGlide() {
         viewModelScope.launch {
             GitHubRepository.getGlide(getApplication())
                 .flowOn(Dispatchers.IO)
-                .collect {
-
+                .collect { status ->
+                    _downloadStatus.value = status
                 }
         }
     }
