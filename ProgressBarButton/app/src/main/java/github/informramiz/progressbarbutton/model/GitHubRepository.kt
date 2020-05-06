@@ -21,7 +21,7 @@ object GitHubRepository {
 
     private suspend fun downloadRepo(context: Context, owner: String, repo: String, outputFileName: String): Flow<DownloadStatus> = flow {
         withContext(Dispatchers.IO) {
-            emit(DownloadStatus.Downloading(0f))
+            emit(DownloadStatus.Downloading(0.1f))
             val response = GitHubAPI.INSTANCE.getRepo(owner, repo)
             if (!response.isSuccessful || response.body() == null) {
                 Timber.d("Get $repo failed")
@@ -53,10 +53,13 @@ object GitHubRepository {
                     totalBytesRead += bytesRead
 
                     var progress = totalBytesRead / totalSize.toDouble()
-                    if (responseBody.contentLength() == -1L && bytesRead != -1 && progress >= 0.99) {
+                    if (progress < 0.1) {
+                        progress = 0.1
+                    }
+                    if (responseBody.contentLength() == -1L && bytesRead != -1 && progress >= 0.9) {
                         //in this case we don't know the totalSize (as contentLength == -1) so
-                        //we keep progress at 99% until we are done
-                        progress = 0.99
+                        //we keep progress at 90% until we are done
+                        progress = 0.9
                     }
                     emit(DownloadStatus.Downloading(progress.toFloat()))
 
