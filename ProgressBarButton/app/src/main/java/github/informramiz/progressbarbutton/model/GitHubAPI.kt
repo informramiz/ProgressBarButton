@@ -26,6 +26,7 @@ interface GitHubAPI {
 //            .addInterceptor(HttpLoggingInterceptor().apply {
 //                level = HttpLoggingInterceptor.Level.BODY
 //            })
+            .cache(null)
             .build()
 
 
