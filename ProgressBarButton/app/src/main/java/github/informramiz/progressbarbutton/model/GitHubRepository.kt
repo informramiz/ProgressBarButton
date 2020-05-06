@@ -24,7 +24,7 @@ import java.net.URLConnection
 object GitHubRepository {
     private const val MIN_PROGRESS = 0.01
     private const val MAX_PROGRESS = 0.9
-    const val TOTAL_SIZE_DEFAULT = 100_000L
+    const val TOTAL_SIZE_DEFAULT = 35_000_000L
 
     suspend fun downloadRepo(
         context: Context,
@@ -75,39 +75,10 @@ object GitHubRepository {
         filename: String,
         responseBody: ResponseBody,
         headers: Headers
-    ): Flow<DownloadStatus> = flow {
-        val file = File(context.getExternalFilesDir(null), filename)
-        file.outputStream().use { outputStream ->
-            responseBody.byteStream().use { inputStream ->
-                val data = ByteArray(1024 * 1)
-                var bytesRead: Int
-                var totalBytesRead = 0L
-                val totalSize = getContentLength(responseBody, headers)
-                Timber.d("Content Length: $totalSize")
-
-                bytesRead = inputStream.read(data)
-                while (bytesRead != -1) {
-                    totalBytesRead += bytesRead
-
-                    var progress = totalBytesRead / totalSize.toDouble()
-                    if (progress < MIN_PROGRESS) {
-                        progress = MIN_PROGRESS
-                    }
-                    if (totalSize == TOTAL_SIZE_DEFAULT && bytesRead != -1 && progress >= MAX_PROGRESS) {
-                        //in this case we don't know the totalSize (as contentLength == -1) so
-                        //we keep progress at 90% until we are done
-                        progress = MAX_PROGRESS
-                    }
-                    emit(DownloadStatus.Downloading(progress.toFloat()))
-
-                    outputStream.write(data, 0, bytesRead)
-                    bytesRead = inputStream.read(data)
-                }
-
-                emit(DownloadStatus.Downloading(1f))
-                emit(DownloadStatus.Downloaded)
-            }
-        }
+    ): Flow<DownloadStatus> {
+        val totalSize = getContentLength(responseBody, headers)
+        Timber.d("Content Length: $totalSize")
+        return readAndSaveStream(context, filename, responseBody.byteStream(), totalSize)
     }
 
     private fun getContentLength(
@@ -145,7 +116,12 @@ object GitHubRepository {
         val file = File(context.getExternalFilesDir(null), filename)
         file.outputStream().use { outputStream ->
             inputStream.use { inputStream ->
-                val data = ByteArray(1024 * 8)
+                val bufferSize = if (totalSize > 10000_000) {
+                    1024 * 16
+                } else {
+                    1024 * 8
+                }
+                val data = ByteArray(bufferSize)
                 var bytesRead: Int
                 var totalBytesRead = 0L
                 Timber.d("Content Length: $totalSize")
