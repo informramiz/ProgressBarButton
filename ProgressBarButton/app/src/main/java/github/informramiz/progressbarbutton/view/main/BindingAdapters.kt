@@ -14,6 +14,6 @@ fun MotionLayout.setDownloadStatus(status: DownloadStatus?) {
         null -> progress = 0f
         DownloadStatus.Downloaded -> progress = 1f
         is DownloadStatus.Downloading -> progress = status.progress
-        is DownloadStatus.DownloadFailed -> {}
+        is DownloadStatus.DownloadFailed -> progress = 0f
     }.exhaustive
 }

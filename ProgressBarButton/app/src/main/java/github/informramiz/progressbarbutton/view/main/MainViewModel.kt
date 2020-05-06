@@ -18,7 +18,12 @@ private enum class Repo(val owner: String, val repoName: String, val outputFileN
     GLIDE("bumptech", "glide", "glide.zip"),
     THIS_PROJECT("udacity", "nd940-c3-advanced-android-programming-project-starter", "nd940.zip"),
     RETROFIT("square", "retrofit", "retrofit.zip"),
-    UNKNOWN("", "", "")
+    UNKNOWN("", "", "");
+
+    val url: String
+        get() {
+            return "https://github.com/$owner/$repoName/archive/master.zip"
+        }
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -35,7 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
         viewModelScope.launch {
-            GitHubRepository.downloadRepo(context, selectedRepo.owner, selectedRepo.repoName, selectedRepo.outputFileName)
+            GitHubRepository.downloadRepoManually(context, selectedRepo.url, selectedRepo.outputFileName)
                 .flowOn(Dispatchers.IO)
                 .collect { status ->
                     _downloadStatus.value = status
