@@ -15,11 +15,7 @@ import java.io.File
  */
 object GitHubRepository {
 
-    suspend fun getGlide(context: Context): Flow<DownloadStatus> {
-        return downloadRepo(context, "bumptech", "glide", "glide.zip")
-    }
-
-    private suspend fun downloadRepo(context: Context, owner: String, repo: String, outputFileName: String): Flow<DownloadStatus> = flow {
+    suspend fun downloadRepo(context: Context, owner: String, repo: String, outputFileName: String): Flow<DownloadStatus> = flow {
         withContext(Dispatchers.IO) {
             emit(DownloadStatus.Downloading(0.1f))
             val response = GitHubAPI.INSTANCE.getRepo(owner, repo)

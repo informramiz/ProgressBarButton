@@ -46,17 +46,20 @@
                 android:id="@+id/radio_button_glide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onGlideClick()}"
                 android:text="@string/download_glide" />
 
             <RadioButton
                 android:id="@+id/radio_button_current"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onThisProjectClick()}"
                 android:text="@string/download_current_repo" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> viewModel.onRetrofitClick()}"
                 android:text="@string/download_retrofit" />
         </RadioGroup>
 
@@ -65,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:foreground="?attr/selectableItemBackground"
-            android:onClick="@{() -> viewModel.downloadGlide()}"
+            android:onClick="@{() -> viewModel.downloadRepo()}"
             app:circularProgressColor="@color/progress_button_circular_progress_color"
             app:horizontalProgressColor="@color/progress_button_horizontal_progress_color"
             app:layout_constraintBottom_toBottomOf="parent"
