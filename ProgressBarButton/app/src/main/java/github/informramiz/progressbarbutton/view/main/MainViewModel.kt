@@ -40,7 +40,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             return
         }
         viewModelScope.launch {
-            GitHubRepository.downloadRepoManually(context, selectedRepo.url, selectedRepo.outputFileName)
+            GitHubRepository.downloadRepo(context, selectedRepo.owner, selectedRepo.repoName, selectedRepo.outputFileName)
                 .flowOn(Dispatchers.IO)
                 .collect { status ->
                     _downloadStatus.value = status
