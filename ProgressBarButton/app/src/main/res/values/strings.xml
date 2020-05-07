@@ -30,4 +30,6 @@
     <string name="notification_repo_downloaded_channel_description">Download notifications are shown in this channel</string>
     <string name="notification_repo_downloaded_body">The %s repository is downloaded</string>
     <string name="notification_repo_downloaded_action_button_check_status">Check Status</string>
+    <string name="detail_fragment_label_repo_name">Repo Name</string>
+    <string name="detail_fragment_label_download_status">Status</string>
 </resources>
