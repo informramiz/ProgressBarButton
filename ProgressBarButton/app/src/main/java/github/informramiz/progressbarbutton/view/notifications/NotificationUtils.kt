@@ -55,6 +55,11 @@ object NotificationUtils {
             .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
             .setAutoCancel(true)
             .setContentIntent(actionIntent)
+            .addAction(
+                R.drawable.cloud_download,
+                context.getString(R.string.notification_repo_downloaded_action_button_check_status),
+                actionIntent
+            )
             .build()
 
         val notificationManager: NotificationManager? = context.getSystemService()
