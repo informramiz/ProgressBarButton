@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import androidx.navigation.NavDeepLinkBuilder
 import github.informramiz.progressbarbutton.R
 
 /**
@@ -35,6 +36,11 @@ object NotificationUtils {
         createChannel(context, NotificationInfo.RepoDownloaded)
         val channelId = NotificationInfo.RepoDownloaded.channelId(context)
         val contentText = context.getString(R.string.notification_repo_downloaded_body, repo)
+        val actionIntent = NavDeepLinkBuilder(context)
+            .setGraph(R.navigation.main_nav_graph)
+            .setDestination(R.id.detailFragment)
+            .createPendingIntent()
+
         val notification = NotificationCompat.Builder(context, channelId)
             .setContentTitle(context.getString(R.string.notification_title))
             .setContentText(contentText)
@@ -42,6 +48,7 @@ object NotificationUtils {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(NotificationCompat.BigTextStyle().bigText(contentText))
             .setAutoCancel(true)
+            .setContentIntent(actionIntent)
             .build()
 
         val notificationManager: NotificationManager? = context.getSystemService()

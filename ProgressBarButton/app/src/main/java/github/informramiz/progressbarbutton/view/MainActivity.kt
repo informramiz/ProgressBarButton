@@ -21,4 +21,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         setupActionBarWithNavController(navController)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
 }

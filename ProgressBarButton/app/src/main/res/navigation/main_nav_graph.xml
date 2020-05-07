@@ -8,4 +8,8 @@
         android:id="@+id/mainFragment"
         android:name="github.informramiz.progressbarbutton.view.main.MainFragment"
         android:label="@string/app_name" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="github.informramiz.progressbarbutton.view.detail.DetailFragment"
+        android:label="@string/detail_fragment_title" />
 </navigation>
