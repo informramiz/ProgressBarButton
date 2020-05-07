@@ -55,8 +55,8 @@ class MainFragment : Fragment() {
                         R.string.msg_we_are_downloading,
                         Toast.LENGTH_SHORT
                     )
+                    toast?.show()
                 }
-                toast?.show()
             }
             is DownloadStatus.DownloadFailed -> {
                 toast?.cancel()

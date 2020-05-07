@@ -6,15 +6,16 @@ import androidx.lifecycle.*
 import github.informramiz.progressbarbutton.R
 import github.informramiz.progressbarbutton.model.DownloadStatus
 import github.informramiz.progressbarbutton.model.GitHubRepository
+import github.informramiz.progressbarbutton.view.notifications.NotificationUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 private enum class Repo(val owner: String, val repoName: String, val outputFileName: String) {
-    GLIDE("bumptech", "glide", "glide.zip"),
+    GLIDE("bumptech", "Glide", "glide.zip"),
     THIS_PROJECT("udacity", "nd940-c3-advanced-android-programming-project-starter", "nd940.zip"),
-    RETROFIT("square", "retrofit", "retrofit.zip"),
+    RETROFIT("square", "Retrofit", "retrofit.zip"),
     UNKNOWN("", "", "");
 
     val url: String
@@ -24,7 +25,8 @@ private enum class Repo(val owner: String, val repoName: String, val outputFileN
 }
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    private val context: Context = application
+    private val context: Context
+        get() = getApplication()
 
     private val _downloadStatus = MutableLiveData<DownloadStatus>()
     val downloadStatus: LiveData<DownloadStatus>
@@ -34,11 +36,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun downloadRepo() {
         if (selectedRepo == Repo.UNKNOWN) {
-            _downloadStatus.value = DownloadStatus.DownloadFailed(Exception(context.getString(R.string.msg_no_repo_selected)))
+            _downloadStatus.value =
+                DownloadStatus.DownloadFailed(Exception(context.getString(R.string.msg_no_repo_selected)))
             return
         }
         viewModelScope.launch {
-            GitHubRepository.downloadRepo(context, selectedRepo.owner, selectedRepo.repoName, selectedRepo.outputFileName)
+            GitHubRepository.downloadRepo(
+                context,
+                selectedRepo.owner,
+                selectedRepo.repoName,
+                selectedRepo.outputFileName
+            )
                 .flowOn(Dispatchers.IO)
                 .collect { status ->
                     _downloadStatus.value = status
@@ -59,6 +67,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onDownloadComplete() {
-        //TODO: trigger notification here
+        val repoName =
+            if (selectedRepo == Repo.THIS_PROJECT) context.getString(R.string.download_current_repo) else selectedRepo.repoName
+        NotificationUtils.sendRepoDownloadedNotification(context, repoName)
     }
 }

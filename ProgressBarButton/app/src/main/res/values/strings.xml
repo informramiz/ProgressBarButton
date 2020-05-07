@@ -7,7 +7,7 @@
     <!--  Main Activity  -->
     <!--    MainFragment-->
     <string name="download_glide">Glide - Image downloading library by BumpTech</string>
-    <string name="download_current_repo">ProgressBarButton - This project repository</string>
+    <string name="download_current_repo">ProgressBarButton - This project</string>
     <string name="download_retrofit">Retrofit - A type safe HTTP client for Android and Java by Square, Inc</string>
     <string name="msg_we_are_downloading">We are downloading</string>
     <string name="msg_default_for_downaloding_failed">Repo downloading failed</string>
@@ -22,4 +22,12 @@
     <string name="button_state_normal">Download</string>
     <string name="button_loading">We are loading </string>
     <string name="button_loading_failed">Loading Retry</string>
+
+
+    <!--  Notifications  -->
+    <string name="notification_repo_downloaded_channel_id">123</string>
+    <string name="notification_repo_downloaded_channel_name">Downloads</string>
+    <string name="notification_repo_downloaded_channel_description">Download notifications are shown in this channel</string>
+    <string name="notification_repo_downloaded_body">The %s repository is downloaded</string>
+    <string name="notification_repo_downloaded_action_button_check_status">Check Status</string>
 </resources>
