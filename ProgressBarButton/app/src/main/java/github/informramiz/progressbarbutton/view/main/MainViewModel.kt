@@ -66,9 +66,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         selectedRepo = Repo.RETROFIT
     }
 
-    fun onDownloadComplete() {
+    fun onDownloadComplete(status: DownloadStatus) {
         val repoName =
             if (selectedRepo == Repo.THIS_PROJECT) context.getString(R.string.download_current_repo) else selectedRepo.repoName
-        NotificationUtils.sendRepoDownloadedNotification(context, repoName)
+        NotificationUtils.sendRepoDownloadedNotification(context, repoName, status is DownloadStatus.Downloaded)
     }
 }

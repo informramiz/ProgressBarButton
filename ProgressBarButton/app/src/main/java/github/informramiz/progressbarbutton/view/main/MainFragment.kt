@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import github.informramiz.progressbarbutton.R
 import github.informramiz.progressbarbutton.databinding.MainFragmentBinding
 import github.informramiz.progressbarbutton.model.DownloadStatus
-import github.informramiz.progressbarbutton.model.exhaustive
 
 class MainFragment : Fragment() {
 
@@ -46,7 +45,7 @@ class MainFragment : Fragment() {
             is DownloadStatus.Downloaded -> {
                 toast?.cancel()
                 toast = null
-                viewModel.onDownloadComplete()
+                viewModel.onDownloadComplete(status)
             }
             is DownloadStatus.Downloading -> {
                 if (toast == null) {

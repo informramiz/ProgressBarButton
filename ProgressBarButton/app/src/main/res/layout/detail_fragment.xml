@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="downloadInfo"
+            type="github.informramiz.progressbarbutton.view.detail.DownloadInfo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,28 +37,53 @@
 
         <TextView
             android:id="@+id/repo_name_label"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:text="@string/detail_fragment_label_repo_name"
             app:layout_constraintTop_toTopOf="@id/guideline_top"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end" />
+            app:layout_constraintStart_toStartOf="@id/guideline_start" />
 
         <TextView
             android:id="@+id/download_status_label"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             android:text="@string/detail_fragment_label_download_status"
             app:layout_constraintTop_toBottomOf="@id/repo_name_label"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintEnd_toEndOf="@id/guideline_end" />
+            app:layout_constraintStart_toStartOf="@id/guideline_start" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/labels_barrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:barrierMargin="20dp"
             app:constraint_referenced_ids="repo_name_label,download_status_label"
             tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/repo_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{downloadInfo.repoName}"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            app:layout_constraintStart_toStartOf="@id/labels_barrier"
+            app:layout_constraintTop_toTopOf="@id/repo_name_label"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            tools:text="My repo"/>
+
+        <TextView
+            android:id="@+id/download_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:text="@{downloadInfo.downloadStatus}"
+            app:layout_constraintStart_toStartOf="@id/labels_barrier"
+            app:layout_constraintTop_toTopOf="@id/download_status_label"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            tools:text="Success"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

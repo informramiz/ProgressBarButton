@@ -9,6 +9,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.navigation.NavDeepLinkBuilder
 import github.informramiz.progressbarbutton.R
+import github.informramiz.progressbarbutton.view.detail.DetailFragmentArgs
+import github.informramiz.progressbarbutton.view.detail.DownloadInfo
 
 /**
  * Created by Ramiz Raja on 07/05/2020
@@ -32,13 +34,17 @@ object NotificationUtils {
         }
     }
 
-    fun sendRepoDownloadedNotification(context: Context, repo: String) {
+    fun sendRepoDownloadedNotification(context: Context, repo: String, downloadStatus: Boolean) {
         createChannel(context, NotificationInfo.RepoDownloaded)
+
         val channelId = NotificationInfo.RepoDownloaded.channelId(context)
         val contentText = context.getString(R.string.notification_repo_downloaded_body, repo)
+
+        val args = DetailFragmentArgs(DownloadInfo(repo, downloadStatus))
         val actionIntent = NavDeepLinkBuilder(context)
             .setGraph(R.navigation.main_nav_graph)
             .setDestination(R.id.detailFragment)
+            .setArguments(args.toBundle())
             .createPendingIntent()
 
         val notification = NotificationCompat.Builder(context, channelId)

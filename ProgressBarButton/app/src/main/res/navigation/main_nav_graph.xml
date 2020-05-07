@@ -11,5 +11,9 @@
     <fragment
         android:id="@+id/detailFragment"
         android:name="github.informramiz.progressbarbutton.view.detail.DetailFragment"
-        android:label="@string/detail_fragment_title" />
+        android:label="@string/detail_fragment_title">
+        <argument
+            android:name="downloadInfo"
+            app:argType="github.informramiz.progressbarbutton.view.detail.DownloadInfo" />
+    </fragment>
 </navigation>
