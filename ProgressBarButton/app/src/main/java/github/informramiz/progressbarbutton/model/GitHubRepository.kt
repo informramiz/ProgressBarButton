@@ -34,7 +34,6 @@ object GitHubRepository {
     ): Flow<DownloadStatus> = flow {
         withContext(Dispatchers.IO) {
             emit(DownloadStatus.Downloading(MIN_PROGRESS.toFloat()))
-//            streamFileManually(context, outputFileName)
             val response = GitHubAPI.INSTANCE.getRepo(owner, repo)
             if (!response.isSuccessful || response.body() == null) {
                 Timber.d("Get $repo failed")
@@ -50,6 +49,7 @@ object GitHubRepository {
                             response.headers()
                         )
                     )
+                    emit(DownloadStatus.Downloaded(repo))
                 } catch (e: Exception) {
                     Timber.d("Repo streaming failed: $e")
                     emit(DownloadStatus.DownloadFailed(e))
@@ -106,6 +106,7 @@ object GitHubRepository {
             is StreamResponse.Ready -> {
                 val totalSize = if (streamResponse.length != StreamResponse.STREAM_LENGTH_UNKNOWN) streamResponse.length else TOTAL_SIZE_DEFAULT
                 emitAll(readAndSaveStream(context, filename, streamResponse.inputStream, totalSize))
+                emit(DownloadStatus.Downloaded(repoUrl))
             }
             is StreamResponse.Failed -> emit(DownloadStatus.DownloadFailed(streamResponse.e))
         }.exhaustive
@@ -146,7 +147,6 @@ object GitHubRepository {
                 }
 
                 emit(DownloadStatus.Downloading(1f))
-                emit(DownloadStatus.Downloaded)
             }
         }
     }

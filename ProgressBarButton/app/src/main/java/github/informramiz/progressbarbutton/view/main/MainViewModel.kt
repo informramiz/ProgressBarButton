@@ -2,17 +2,14 @@ package github.informramiz.progressbarbutton.view.main
 
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.*
+import github.informramiz.progressbarbutton.R
 import github.informramiz.progressbarbutton.model.DownloadStatus
 import github.informramiz.progressbarbutton.model.GitHubRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 private enum class Repo(val owner: String, val repoName: String, val outputFileName: String) {
     GLIDE("bumptech", "glide", "glide.zip"),
@@ -37,6 +34,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun downloadRepo() {
         if (selectedRepo == Repo.UNKNOWN) {
+            _downloadStatus.value = DownloadStatus.DownloadFailed(Exception(context.getString(R.string.msg_no_repo_selected)))
             return
         }
         viewModelScope.launch {
@@ -58,5 +56,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onRetrofitClick() {
         selectedRepo = Repo.RETROFIT
+    }
+
+    fun onDownloadComplete() {
+        //TODO: trigger notification here
     }
 }

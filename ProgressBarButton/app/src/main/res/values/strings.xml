@@ -5,9 +5,13 @@
     <string name="action_settings">Settings</string>
 
     <!--  Main Activity  -->
+    <!--    MainFragment-->
     <string name="download_glide">Glide - Image downloading library by BumpTech</string>
     <string name="download_current_repo">ProgressBarButton - This project repository</string>
     <string name="download_retrofit">Retrofit - A type safe HTTP client for Android and Java by Square, Inc</string>
+    <string name="msg_we_are_downloading">We are downloading</string>
+    <string name="msg_default_for_downaloding_failed">Repo downloading failed</string>
+    <string name="msg_no_repo_selected">Please select a repo to download first</string>
 
     <!-- Notification   -->
     <string name="notification_title">Udacity: Android Kotlin Nanodegree </string>
